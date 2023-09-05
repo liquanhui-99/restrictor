@@ -1,6 +1,8 @@
 package restrictor
 
-import "context"
+import (
+	"context"
+)
 
 // Limiter 单机使用的限流器接口
 type Limiter interface {
@@ -10,5 +12,5 @@ type Limiter interface {
 
 // DistributedLimiter 分布式场景下使用的限流器接口
 type DistributedLimiter interface {
-	Allow(ctx context.Context)
+	Allow(ctx context.Context, key string) (bool, error)
 }
