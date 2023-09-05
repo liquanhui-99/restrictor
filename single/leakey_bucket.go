@@ -31,9 +31,9 @@ func (l LeakeyBucketLimiter) Allow(ctx context.Context) (bool, error) {
 	select {
 	case <-ctx.Done():
 		return false, ctx.Err()
-	case <-l.t.C:
-		return true, nil
 	case <-l.close:
+		return true, nil
+	case <-l.t.C:
 		return true, nil
 	}
 }

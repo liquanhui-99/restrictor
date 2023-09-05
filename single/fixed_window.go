@@ -42,16 +42,11 @@ func (f *FixedWindowLimiter) Allow(ctx context.Context) (bool, error) {
 	}
 	// 窗口内的请求数量已经超过最大限度
 	cc = atomic.LoadInt64(&f.currentCount)
-	if f.currentCount > f.maxCount {
+	if f.currentCount >= f.maxCount {
 		return false, errors.New("超过最大请求数量限制")
 	}
 
 	atomic.AddInt64(&f.currentCount, 1)
 
 	return true, nil
-}
-
-func (f *FixedWindowLimiter) Close() {
-	//TODO implement me
-	panic("implement me")
 }

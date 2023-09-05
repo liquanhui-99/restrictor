@@ -43,7 +43,6 @@ func (s *SlideWindowLimiter) Allow(ctx context.Context) (bool, error) {
 	// 慢路径，队列满了，必须先清理出超过窗口时间的请求，再取判断是否超过
 	// 最大请求限制
 	boundary := now - s.interval
-	s.mu.Lock()
 	first := s.queue.Front()
 	// 循环队列，第一个元素不为空且第一个元素的请求时间不在窗口范围之内，
 	// 需要清除掉缓存
