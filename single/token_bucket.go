@@ -19,7 +19,7 @@ type TokenBucketLimiter struct {
 
 // NewTokenBucketLimiter 初始化令牌桶，capacity是缓存令牌的channel容量，控制可以通过的最大请求，
 // 容量设置需要谨慎，如果开的过大，服务器可能会被瞬间的流量击垮；interval是发送令牌的间隔，多久发送一次令牌
-func NewTokenBucketLimiter(capacity int, interval time.Duration) *TokenBucketLimiter {
+func NewTokenBucketLimiter(capacity int64, interval time.Duration) *TokenBucketLimiter {
 	ch := make(chan struct{}, capacity)
 	closeCh := make(chan struct{})
 	go func() {
@@ -27,14 +27,14 @@ func NewTokenBucketLimiter(capacity int, interval time.Duration) *TokenBucketLim
 		defer ticker.Stop()
 		for {
 			select {
+			case <-closeCh:
+				return
 			case <-ticker.C:
 				// 发送令牌
 				select {
 				case ch <- struct{}{}:
 				default:
 				}
-			case <-closeCh:
-				return
 			}
 		}
 	}()
@@ -51,11 +51,11 @@ func NewTokenBucketLimiter(capacity int, interval time.Duration) *TokenBucketLim
 // Allow 是否运行继续请求
 func (t TokenBucketLimiter) Allow(ctx context.Context) (bool, error) {
 	select {
-	case <-ctx.Done():
-		return false, ctx.Err()
 	case <-t.close:
 		// 关闭限流器
 		return true, nil
+	case <-ctx.Done():
+		return false, ctx.Err()
 	case <-t.ch:
 		return true, nil
 	default:
