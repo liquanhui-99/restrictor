@@ -1,4 +1,4 @@
-package expand
+package main
 
 import (
 	"context"
