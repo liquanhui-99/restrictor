@@ -50,3 +50,5 @@ func (f *FixedWindowLimiter) Allow(ctx context.Context) (bool, error) {
 
 	return true, nil
 }
+
+func (f *FixedWindowLimiter) Close() {}

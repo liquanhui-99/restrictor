@@ -61,3 +61,5 @@ func (s *SlideWindowLimiter) Allow(ctx context.Context) (bool, error) {
 
 	return true, nil
 }
+
+func (s *SlideWindowLimiter) Close() {}

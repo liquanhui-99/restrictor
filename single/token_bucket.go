@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// TokenBucketLimiter 令牌痛算法实现的限流器
+// TokenBucketLimiter 令牌桶算法实现的限流器
 type TokenBucketLimiter struct {
 	// 令牌桶队列
 	ch chan struct{}
