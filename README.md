@@ -10,3 +10,5 @@ Limiter接口是单体服务，单体服务提供了四种实现：
 DistributedLimiter接口是分布式服务的限流器，提供了两种实现：
 1. 固定窗口限流
 2. 滑动窗口限流
+
+IpLimiter在单体Limiter基础上封装的ip限流器
